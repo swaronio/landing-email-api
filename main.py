@@ -14,7 +14,6 @@ def getDb():
 app = FastAPI()
 
 load_environment()
-print(Environment.DB_USER)
 
 @app.get('/')
 def read_root():
