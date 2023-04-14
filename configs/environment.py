@@ -12,6 +12,7 @@ class Environment:
         dotenv.load_dotenv()
         Environment.update_environment()
         
+    @staticmethod
     def update_environment():
         Environment.DB_USER = os.getenv('DB_USER')
         Environment.DB_PASSWORD = os.getenv('DB_PASSWORD')
