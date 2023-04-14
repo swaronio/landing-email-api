@@ -5,7 +5,7 @@ from sqlalchemy import Column,Integer,String,DateTime, MetaData, Table, ForeignK
 engine = Database()._engine
 metadata = MetaData()
 
-landingEmail = Table(
+LandingEmail = Table(
     'landing_email',
     metadata,
     Column("email", String(60)),
