@@ -10,11 +10,10 @@ def getDb():
     finally:
         db.close()
 
-
 app = FastAPI()
 
 @app.get('/')
-async def read_root():
+def read_root():
     size = len('pedro_gonsalves@hotmail.com')
     return {"FODASE":size}
 
