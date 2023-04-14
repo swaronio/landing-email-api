@@ -1,11 +1,11 @@
 from typing import Any
 from sqlalchemy import MetaData,create_engine, schema
 from sqlalchemy.engine import CursorResult
+from configs.environment_variables import get_environment_variables as env
 
 class Database():
 
     def __init__(self):
-        from configs.environment_variables import get_environment_variables as env
         from sqlalchemy.ext.declarative import declarative_base
         from sqlalchemy.orm import sessionmaker
 
@@ -14,7 +14,6 @@ class Database():
         Base = declarative_base()
         SessionLocal = sessionmaker(bind=engine)
         session = SessionLocal()
-
 
         schemas = ['contact']
         for schemaName in schemas:
@@ -37,4 +36,4 @@ class Database():
 
 
     def create_table(self):
-        pass
+        print("buabaubaua")
