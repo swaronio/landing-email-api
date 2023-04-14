@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException, Request
+from fastapi import FastAPI, HTTPException
 from sqlalchemy.orm import session
 from database.connection import Database
 import uvicorn
@@ -21,7 +21,7 @@ def read_root():
     return {"FODASE":size}
 
 @app.post('/email/{email}')
-async def emailInsert(email: Request):
+async def emailInsert(email: str):
     req_info = await email.json()
     email = req_info[0].get('email')
     print(email)
