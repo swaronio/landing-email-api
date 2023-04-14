@@ -1,7 +1,8 @@
 from fastapi import FastAPI, HTTPException, Request
-from sqlalchemy.orm import Session
-from database.models.contact_schema import landingEmail
+from sqlalchemy.orm import session
 from database.connection import Database
+import uvicorn
+from configs.environment import load_environment, Environment
 
 def getDb():
     db = Database()._session
@@ -11,6 +12,8 @@ def getDb():
         db.close()
 
 app = FastAPI()
+
+load_environment()
 
 @app.get('/')
 def read_root():
@@ -25,3 +28,12 @@ async def emailInsert(email: Request):
     return {
         "status":"SUCCESS",
     }
+
+if __name__ == '__main__':
+    uvicorn.run(
+        app='main:app',
+        host='0.0.0.0',
+        port=8000,
+        reload=True,
+        log_level='info'
+    )

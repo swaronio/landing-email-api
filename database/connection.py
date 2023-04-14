@@ -1,7 +1,7 @@
 from typing import Any
 from sqlalchemy import MetaData,create_engine, schema
 from sqlalchemy.engine import CursorResult
-from configs.environment_variables import get_environment_variables as env
+from configs.environment import Environment
 
 class Database():
 
@@ -9,7 +9,7 @@ class Database():
         from sqlalchemy.ext.declarative import declarative_base
         from sqlalchemy.orm import sessionmaker
 
-        engine = create_engine(url=f"postgresql://{env('user')}:{env('password')}@{env('host')}:{env('port')}/{env('database_name')}",
+        engine = create_engine(url=f"postgresql://{Environment.DB_USER}:{Environment.DB_PASSWORD}@{Environment.DB_HOST}:{str(Environment.DB_PORT)}/{Environment.DB_NAME}",
                                echo=True)
         Base = declarative_base()
         SessionLocal = sessionmaker(bind=engine)
