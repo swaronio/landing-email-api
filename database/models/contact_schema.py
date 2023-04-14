@@ -5,11 +5,10 @@ from sqlalchemy import Column,Integer,String,DateTime, MetaData, Table, ForeignK
 engine = Database()._engine
 metadata = MetaData()
 
-
 landingEmail = Table(
     'landing_email',
     metadata,
     Column("email", String(60)),
-    Column("signed_up_at",DateTime,server_default=func.now()),
+    Column("created_at", DateTime,server_default=func.now()),
     schema='contact'
 )
