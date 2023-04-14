@@ -1,19 +1,12 @@
-from fastapi import FastAPI, HTTPException, Request
+from fastapi import FastAPI, HTTPException
 from sqlalchemy.orm import session
-from database.connection import Database
+from database.connection import db
 import uvicorn
 from configs.environment import Environment
-
-def getDb():
-    db = Database()._session
-    try:
-        yield db
-    finally:
-        db.close()
+from database.models.contact_schema import LandingEmail
 
 app = FastAPI()
-
-Environment.load_environment()
+db.connect()
 
 @app.get('/')
 def read_root():
@@ -21,9 +14,8 @@ def read_root():
     return {"FODASE":size}
 
 @app.post('/email/{email}')
-async def emailInsert(email: Request):
-    req_info = await email.json()
-    email = req_info[0].get('email')
+async def emailInsert(email: str):
+    newLandingEmail = LandingEmail.create(email=email)
     print(email)
     return {
         "status":"SUCCESS",

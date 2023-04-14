@@ -10,3 +10,16 @@ class Environment:
     @staticmethod
     def load_environment():
         dotenv.load_dotenv()
+        '''
+        The line below is required to update the class variables
+        after loading the environment variables
+        '''
+        Environment.update_environment()
+        
+    @staticmethod
+    def update_environment():
+        Environment.DB_USER = os.getenv('DB_USER')
+        Environment.DB_PASSWORD = os.getenv('DB_PASSWORD')
+        Environment.DB_HOST = os.getenv('DB_HOST')
+        Environment.DB_PORT = os.getenv('DB_PORT')
+        Environment.DB_NAME = os.getenv('DB_NAME')

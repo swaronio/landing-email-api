@@ -3,24 +3,28 @@ from sqlalchemy import MetaData,create_engine, schema
 from sqlalchemy.engine import CursorResult
 from configs.environment import Environment
 
-class Database():
-
+class Database:
     def __init__(self):
+        self._engine = None
+        self._base = None
+        self._meta = None
+        self._session = None
+
+    def connect(self):
         from sqlalchemy.ext.declarative import declarative_base
         from sqlalchemy.orm import sessionmaker
 
-        engine = create_engine(url=f"postgresql://{Environment.DB_USER}:{Environment.DB_PASSWORD}@{Environment.DB_HOST}:{str(Environment.DB_PORT)}/{Environment.DB_NAME}",
+        self._engine = create_engine(url=f"postgresql://{Environment.DB_USER}:{Environment.DB_PASSWORD}@{Environment.DB_HOST}:{str(Environment.DB_PORT)}/{Environment.DB_NAME}",
                                echo=True)
         Base = declarative_base()
-        SessionLocal = sessionmaker(bind=engine)
+        SessionLocal = sessionmaker(bind=self._engine)
         session = SessionLocal()
 
         schemas = ['contact']
         for schemaName in schemas:
-            if not engine.dialect.has_schema(engine, schemaName):
-                engine.execute(schema.CreateSchema(schemaName))
+            if not self._engine.dialect.has_schema(self._engine, schemaName):
+                self._engine.execute(schema.CreateSchema(schemaName))
 
-        self._engine = engine
         self._base = Base
         self._meta = MetaData()
         self._session = session
@@ -37,3 +41,5 @@ class Database():
 
     def create_table(self):
         print("buabaubaua")
+
+db = Database()
