@@ -10,6 +10,10 @@ class Environment:
     @staticmethod
     def load_environment():
         dotenv.load_dotenv()
+        '''
+        The line below is required to update the class variables
+        after loading the environment variables
+        '''
         Environment.update_environment()
         
     @staticmethod
