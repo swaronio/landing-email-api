@@ -2,7 +2,7 @@ from fastapi import FastAPI, HTTPException, Request
 from sqlalchemy.orm import session
 from database.connection import Database
 import uvicorn
-from configs.environment import load_environment, Environment
+from configs.environment import Environment
 
 def getDb():
     db = Database()._session
@@ -13,7 +13,7 @@ def getDb():
 
 app = FastAPI()
 
-load_environment()
+Environment.load_environment()
 
 @app.get('/')
 def read_root():
