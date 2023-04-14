@@ -3,7 +3,7 @@ from sqlalchemy.orm import session
 from database.connection import db
 import uvicorn
 from configs.environment import Environment
-# from database.models.contact_schema import LandingEmail
+from database.models.contact_schema import LandingEmail
 
 app = FastAPI()
 db.connect()
