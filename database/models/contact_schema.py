@@ -1,8 +1,8 @@
-from database.connection import Database
+from database.connection import db
 from sqlalchemy import func
 from sqlalchemy import Column,Integer,String,DateTime, MetaData, Table, ForeignKey
 
-engine = Database()._engine
+engine = db._engine
 metadata = MetaData()
 
 LandingEmail = Table(
