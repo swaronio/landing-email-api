@@ -20,6 +20,7 @@ class Database:
         SessionLocal = sessionmaker(bind=self._engine)
         session = SessionLocal()
 
+        #schemas in the list are validated and if they do not exist in the database they are created
         schemas = ['contact']
         for schemaName in schemas:
             if not self._engine.dialect.has_schema(self._engine, schemaName):
@@ -40,6 +41,8 @@ class Database:
 
 
     def create_table(self):
-        print("buabaubaua")
+        #metadata variable is responsible for migrating the landingEmail object to the db
+        from models.contact_schema import metadata
+        metadata
 
 db = Database()
