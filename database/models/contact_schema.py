@@ -8,7 +8,7 @@ metadata = MetaData()
 LandingEmail = Table(
     'landing_email',
     metadata,
-    Column("email", String(60)),
+    Column("email", String(60), unique=True),
     Column("created_at", DateTime,server_default=func.now()),
     schema='contact'
 )
