@@ -8,7 +8,6 @@ from database.models.contact_schema import LandingEmail
 
 app = FastAPI()
 
-Environment.load_environment()
 db.connect()
 
 @app.get('/')

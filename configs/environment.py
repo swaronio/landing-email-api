@@ -1,25 +1,8 @@
-import os, dotenv
+import os
 
 class Environment:
-    DB_USER = os.getenv('DB_USER')
-    DB_PASSWORD = os.getenv('DB_PASSWORD')
-    DB_HOST = os.getenv('DB_HOST')
-    DB_PORT = os.getenv('DB_PORT')
-    DB_NAME = os.getenv('DB_NAME')
-
-    @staticmethod
-    def load_environment():
-        dotenv.load_dotenv()
-        '''
-        The line below is required to update the class variables
-        after loading the environment variables
-        '''
-        Environment.update_environment()
-        
-    @staticmethod
-    def update_environment():
-        Environment.DB_USER = os.getenv('DB_USER')
-        Environment.DB_PASSWORD = os.getenv('DB_PASSWORD')
-        Environment.DB_HOST = os.getenv('DB_HOST')
-        Environment.DB_PORT = os.getenv('DB_PORT')
-        Environment.DB_NAME = os.getenv('DB_NAME')
+    DB_USER = os.environ['DB_USER']
+    DB_PASSWORD = os.environ['DB_PASSWORD']
+    DB_HOST = os.environ['DB_HOST']
+    DB_PORT = os.environ['DB_PORT']
+    DB_NAME = os.environ['DB_NAME']
