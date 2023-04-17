@@ -1,45 +1,16 @@
-from typing import Any
-from sqlalchemy import MetaData,create_engine, schema
-from sqlalchemy.engine import CursorResult
-from configs.environment import Environment
+from sqlalchemy import create_engine
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
 
-class Database:
-    def __init__(self):
-        self._engine = None
-        self._base = None
-        self._meta = None
-        self._session = None
+Base = declarative_base()
 
-    def connect(self):
-        from sqlalchemy.ext.declarative import declarative_base
-        from sqlalchemy.orm import sessionmaker
+def new_engine():
+    return create_engine("sqlite+pysqlite:///:memory:", echo=True)
 
-        self._engine = create_engine(url=f"postgresql://{Environment.DB_USER}:{Environment.DB_PASSWORD}@{Environment.DB_HOST}:{str(Environment.DB_PORT)}/{Environment.DB_NAME}",
-                               echo=True)
-        Base = declarative_base()
-        SessionLocal = sessionmaker(bind=self._engine)
-        session = SessionLocal()
+engine = new_engine()
 
-        schemas = ['contact']
-        for schemaName in schemas:
-            if not self._engine.dialect.has_schema(self._engine, schemaName):
-                self._engine.execute(schema.CreateSchema(schemaName))
+def new_session():
+    return sessionmaker(autocommit=False, autoflush=False, bind=engine)()
 
-        self._base = Base
-        self._meta = MetaData()
-        self._session = session
-
-    def exec_dml_com(self,query:Any):
-        with self._engine.connect() as conn:
-            conn.execute(query)
-
-    def exec_dql_comm(self,query:Any) -> CursorResult:
-        with self._engine.connect() as conn:
-            result = conn.execute(query)
-        return result
-
-
-    def create_table(self):
-        print("buabaubaua")
-
-db = Database()
+def create_all():
+    Base.metadata.create_all(engine)

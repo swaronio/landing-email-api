@@ -1,33 +1,22 @@
-from fastapi import FastAPI, HTTPException
-from sqlalchemy.orm import session
-from sqlalchemy import insert
-from database.connection import db
+from typing import Annotated
+from fastapi import FastAPI, Form
 import uvicorn
-from configs.environment import Environment
-from database.models.contact_schema import LandingEmail
+from database.connection import create_all, new_session
+from database.models.subscriber import Subscriber
 
 app = FastAPI()
 
-db.connect()
+create_all()
 
-@app.get('/')
-def read_root():
-    size = len('pedro_gonsalves@hotmail.com')
-    return {"FODASE":size}
 
-@app.post('/email/{email}')
-async def emailInsert(email: str):
-    insert_res = db.exec_dml_com(
-        insert(LandingEmail).values(
-            email=email
-        )
-    )
-    db._session.add(insert_res)
-    db._session.commit()
+@app.post('/register')
+async def register(email: Annotated[str, Form()]):
+    new_sub = Subscriber(email=email)
+    session = new_session()
+    session.add(new_sub)
+    session.commit()
+    return {"message": "You are now subscribed to swaron.io"}
 
-    return {
-        "status":"SUCCESS",
-    }
 
 if __name__ == '__main__':
     uvicorn.run(
