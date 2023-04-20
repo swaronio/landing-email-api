@@ -13,11 +13,13 @@ create_all()
 async def register(body = Body(...)):
     email = body.get("email")
     try:
-        emailInfo = validate_email(email, check_deliverability=False)
+        validate_email(email, check_deliverability=False)
+        
         db = new_session()
         subscriber = Subscriber(email=email)
         db.add(subscriber)
         db.commit()
+        
         return {"message": "Email registered successfully."}
     except IntegrityError:
         return HTTPException(status_code=409, detail="Email already registered.")
