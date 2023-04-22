@@ -29,8 +29,8 @@ async def register(body = Body(...)):
         mailserver.login(os.getenv('EMAIL_USER'), os.getenv('EMAIL_PASSWORD'))
 
         msg = EmailMessage()
-        msg.set_content("Hello Underworld!")
-        msg['Subject'] = "Hello Underworld from Python Gmail!"
+        msg.set_content("Hello, welcome to swaron.io!")
+        msg['Subject'] = "Hello, welcome to swaron.io!"
         msg['From'] = os.getenv('EMAIL_USER')
         msg['To'] = email
 
