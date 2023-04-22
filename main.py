@@ -1,9 +1,12 @@
+import os
 from fastapi import FastAPI,HTTPException, Body
 import uvicorn
 from sqlalchemy.exc import IntegrityError
 from database.connection import create_all, new_session
 from database.models.subscriber import Subscriber
 from email_validator import validate_email, EmailNotValidError, EmailSyntaxError
+import smtplib
+from email.message import EmailMessage
 
 app = FastAPI()
 
@@ -19,6 +22,20 @@ async def register(body = Body(...)):
         subscriber = Subscriber(email=email)
         db.add(subscriber)
         db.commit()
+
+        # Send email
+        mailserver = smtplib.SMTP('smtp.gmail.com', 587)
+        mailserver.starttls()
+        mailserver.login(os.getenv('EMAIL_USER'), os.getenv('EMAIL_PASSWORD'))
+
+        msg = EmailMessage()
+        msg.set_content("Hello Underworld!")
+        msg['Subject'] = "Hello Underworld from Python Gmail!"
+        msg['From'] = os.getenv('EMAIL_USER')
+        msg['To'] = email
+
+        mailserver.send_message(msg.as_string())
+        mailserver.quit()
         
         return {"message": "Email registered successfully."}
     except IntegrityError:
