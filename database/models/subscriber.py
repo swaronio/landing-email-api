@@ -7,5 +7,5 @@ class Subscriber(Base):
     __tablename__ = "subscribers"
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    email: Mapped[str] = mapped_column(String(255))
+    email: Mapped[str] = mapped_column(String(255), unique=True, nullable=False)
     created_at: Mapped[datetime] = mapped_column(insert_default=func.now())

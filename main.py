@@ -1,5 +1,5 @@
 import os
-from fastapi import FastAPI,HTTPException, Body
+from fastapi import FastAPI, HTTPException, Body
 import uvicorn
 from sqlalchemy.exc import IntegrityError
 from database.connection import create_all, new_session
@@ -12,16 +12,21 @@ app = FastAPI()
 
 create_all()
 
-@app.post('/register')
+@app.post('/register', status_code=201)
 async def register(body = Body(...)):
     email = body.get("email")
     try:
         validate_email(email, check_deliverability=False)
         
         db = new_session()
+
+        subscriber_exists = db.query(Subscriber).filter(Subscriber.email == email).first()
+
+        if subscriber_exists:
+            raise HTTPException(status_code=409, detail="Email already registered.")
+
         subscriber = Subscriber(email=email)
         db.add(subscriber)
-        db.commit()
 
         # Send email
         mailserver = smtplib.SMTP('smtp.zoho.com', 587)
@@ -35,13 +40,14 @@ async def register(body = Body(...)):
         msg['To'] = email
 
         mailserver.send_message(msg)
+
+        db.commit()
+
         mailserver.quit()
         
         return {"message": "Email registered successfully."}
-    except IntegrityError:
-        return HTTPException(status_code=409, detail="Email already registered.")
     except EmailSyntaxError or EmailNotValidError:
-        return HTTPException(status_code=406, detail="Email format is not valid.",headers=None)
+        raise HTTPException(status_code=406, detail="Email format is not valid.",headers=None)
 
 if __name__ == '__main__':
     uvicorn.run(
