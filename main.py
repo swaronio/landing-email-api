@@ -1,16 +1,24 @@
 import os
 from fastapi import FastAPI, HTTPException, Body
 import uvicorn
-from sqlalchemy.exc import IntegrityError
 from database.connection import create_all, new_session
 from database.models.subscriber import Subscriber
 from email_validator import validate_email, EmailNotValidError, EmailSyntaxError
 import smtplib
 from email.message import EmailMessage
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
 create_all()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.post('/register', status_code=201)
 async def register(body = Body(...)):
@@ -29,7 +37,7 @@ async def register(body = Body(...)):
         db.add(subscriber)
 
         # Send email
-        mailserver = smtplib.SMTP('smtp.zoho.com', 587)
+        mailserver = smtplib.SMTP(os.getenv('EMAIL_SERVER'), 587)
         mailserver.starttls()
         mailserver.login(os.getenv('EMAIL_USER'), os.getenv('EMAIL_PASSWORD'))
 
