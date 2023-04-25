@@ -24,17 +24,17 @@ async def register(body = Body(...)):
         db.commit()
 
         # Send email
-        mailserver = smtplib.SMTP('smtp.gmail.com', 587)
+        mailserver = smtplib.SMTP('smtp.zoho.com', 587)
         mailserver.starttls()
         mailserver.login(os.getenv('EMAIL_USER'), os.getenv('EMAIL_PASSWORD'))
 
         msg = EmailMessage()
-        msg.set_content("Hello, welcome to swaron.io!")
+        msg.set_content("Hello, welcome to swaron.io! \n\nWe are a educational platform that aims to help students to learn computer science for free. \n\nWe are still in development, but we will send you an email when we launch. \n\nThank you for your support! \n\nSwaron Team")
         msg['Subject'] = "Hello, welcome to swaron.io!"
         msg['From'] = os.getenv('EMAIL_USER')
         msg['To'] = email
 
-        mailserver.send_message(msg.as_string())
+        mailserver.send_message(msg)
         mailserver.quit()
         
         return {"message": "Email registered successfully."}
