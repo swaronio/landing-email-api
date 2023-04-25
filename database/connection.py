@@ -5,7 +5,7 @@ from sqlalchemy.orm import sessionmaker
 Base = declarative_base()
 
 def new_engine():
-    return create_engine("sqlite+pysqlite:///:memory:", echo=True)
+    return create_engine("sqlite+pysqlite:///swaron.db", echo=True)
 
 engine = new_engine()
 
