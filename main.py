@@ -42,7 +42,7 @@ async def register(body = Body(...)):
         mailserver.login(os.getenv('EMAIL_USER'), os.getenv('EMAIL_PASSWORD'))
 
         msg = EmailMessage()
-        msg.set_content("Hello, welcome to swaron.io! \n\nWe are a educational platform that aims to help students to learn computer science for free. \n\nWe are still in development, but we will send you an email when we launch. \n\nThank you for your support! \n\nSwaron Team")
+        msg.set_content("Hello, welcome to swaron.io! \n\nWe are an educational platform that aims to help students to learn computer science for free. \n\nWe are still in development, but we will send you an email when we launch. \n\nThank you for your support! \n\nSwaron Team")
         msg['Subject'] = "Hello, welcome to swaron.io!"
         msg['From'] = os.getenv('EMAIL_USER')
         msg['To'] = email
