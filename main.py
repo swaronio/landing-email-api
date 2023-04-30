@@ -29,7 +29,7 @@ async def register(body = Body(...)):
 
     try:
         validate_email(email, check_deliverability=False)
-        
+
         db = new_session()
 
         subscriber_exists = db.query(Subscriber).filter(Subscriber.email == email).first()
@@ -43,7 +43,7 @@ async def register(body = Body(...)):
         landing_email_send(email)
 
         db.commit()
-        
+
         return {"message": "Email registered successfully."}
 
     except EmailSyntaxError or EmailNotValidError:
