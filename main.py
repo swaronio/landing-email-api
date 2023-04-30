@@ -7,7 +7,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from database.connection import create_all, new_session
 from database.models.subscriber import Subscriber
-from email_service.landing_page import landing_email_send
+from email_service.landing_page import send_email
 
 app = FastAPI()
 
@@ -44,7 +44,7 @@ async def register(body=Body(...)):
         subscriber = Subscriber(email=email)
         db.add(subscriber)
 
-        landing_email_send(email)
+        send_email(email)
 
         db.commit()
 
