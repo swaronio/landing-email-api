@@ -15,19 +15,18 @@ class UserAlreadySubscribed(Exception):
     pass
 
 
-def register(email: str, db):
+def register(email: str, db, email_sender):
     already_subscribed = db.query(
         db.query(Subscriber).filter(Subscriber.email == email).exists()
-    )
-    print("Already subscribed?", already_subscribed.scalar())
-    if already_subscribed.scalar():
+    ).scalar()
+    if already_subscribed:
         raise UserAlreadySubscribed
 
     subscriber = Subscriber(email=email)
+
+    email_sender(email)
+
     db.add(subscriber)
-
-    send_email(email)
-
     db.commit()
 
 
