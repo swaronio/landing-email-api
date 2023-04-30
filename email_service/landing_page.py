@@ -8,8 +8,30 @@ from io import BytesIO
 import requests
 from PIL import Image
 
+from database.models.subscriber import Subscriber
 
-def landing_email_send(to: str):
+
+class UserAlreadySubscribed(Exception):
+    pass
+
+
+def register(email: str, db):
+    already_subscribed = db.query(
+        db.query(Subscriber).filter(Subscriber.email == email).exists()
+    )
+    print("Already subscribed?", already_subscribed.scalar())
+    if already_subscribed.scalar():
+        raise UserAlreadySubscribed
+
+    subscriber = Subscriber(email=email)
+    db.add(subscriber)
+
+    send_email(email)
+
+    db.commit()
+
+
+def send_email(to: str):
     response = requests.get("https://i.ibb.co/h28SwBQ/swaron-2.jpg")
     img = Image.open(BytesIO(response.content))
 

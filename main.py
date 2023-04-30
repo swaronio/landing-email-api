@@ -1,10 +1,12 @@
 import os
-from fastapi import FastAPI, HTTPException, Body
+
 import uvicorn
+from email_validator import EmailNotValidError, EmailSyntaxError, validate_email
+from fastapi import Body, FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
+
 from database.connection import create_all, new_session
 from database.models.subscriber import Subscriber
-from email_validator import validate_email, EmailNotValidError, EmailSyntaxError
-from fastapi.middleware.cors import CORSMiddleware
 from email_service.landing_page import landing_email_send
 
 app = FastAPI()
@@ -19,11 +21,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-@app.post('/register', status_code=201)
-async def register(body = Body(...)):
 
+@app.post("/register", status_code=201)
+async def register(body=Body(...)):
     try:
-        email = body['email']
+        email = body["email"]
     except KeyError:
         raise HTTPException(status_code=404, detail="Email field expected.")
 
@@ -32,7 +34,9 @@ async def register(body = Body(...)):
 
         db = new_session()
 
-        subscriber_exists = db.query(Subscriber).filter(Subscriber.email == email).first()
+        subscriber_exists = (
+            db.query(Subscriber).filter(Subscriber.email == email).first()
+        )
 
         if subscriber_exists:
             raise HTTPException(status_code=409, detail="Email already registered.")
@@ -49,11 +53,12 @@ async def register(body = Body(...)):
     except EmailSyntaxError or EmailNotValidError:
         raise HTTPException(status_code=406, detail="Email format is not valid.")
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     uvicorn.run(
-        app='main:app',
-        host='0.0.0.0',
+        app="main:app",
+        host="0.0.0.0",
         port=8000,
-        reload=os.getenv('SERVER_DEBUG') == 'True',
-        log_level='info'
+        reload=os.getenv("SERVER_DEBUG") == "True",
+        log_level="info",
     )
