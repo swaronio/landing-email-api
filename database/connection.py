@@ -1,19 +1,25 @@
-from sqlalchemy import create_engine
+import os
+
+from sqlalchemy import URL, create_engine
 from sqlalchemy.orm import declarative_base, sessionmaker
 
 Base = declarative_base()
 
 
 def new_engine():
-    return create_engine("sqlite+pysqlite:///swaron.db", echo=True)
+    url = URL.create(
+        "mysql+mysqlconnector",
+        username=os.environ["DB_USER"],
+        password=os.environ["DB_PASSWORD"],
+        host=os.environ["DB_HOST"],
+        database=os.environ["DB_NAME"],
+    )
+    return create_engine(url, echo=True)
 
 
-engine = new_engine()
+def new_session(engine):
+    return sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 
-def new_session():
-    return sessionmaker(autocommit=False, autoflush=False, bind=engine)()
-
-
-def create_all():
+def create_all(engine):
     Base.metadata.create_all(engine)

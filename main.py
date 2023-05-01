@@ -5,14 +5,15 @@ from email_validator import EmailNotValidError, EmailSyntaxError, validate_email
 from fastapi import Body, FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
-from database.connection import create_all, new_session
+from database.connection import create_all, new_engine, new_session
 from database.models.subscriber import Subscriber
 from email_service.landing_page import send_email
 
+engine = new_engine()
+create_all(engine)
+Session = new_session(engine)
+
 app = FastAPI()
-
-create_all()
-
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -32,7 +33,7 @@ async def register(body=Body(...)):
     try:
         validate_email(email, check_deliverability=False)
 
-        db = new_session()
+        db = Session()
 
         subscriber_exists = (
             db.query(Subscriber).filter(Subscriber.email == email).first()
