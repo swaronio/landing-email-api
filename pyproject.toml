@@ -21,3 +21,6 @@ max-complexity = 10
 pythonpath = [
   "."
 ]
+filterwarnings = [
+  "ignore::sqlalchemy.exc.SAWarning",
+]
