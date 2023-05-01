@@ -24,10 +24,14 @@ def register(email: str, db, email_sender):
 
     subscriber = Subscriber(email=email)
 
-    email_sender(email)
-
-    db.add(subscriber)
-    db.commit()
+    try:
+        db.add(subscriber)
+        email_sender(email)
+    except:
+        db.rollback()
+        raise
+    else:
+        db.commit()
 
 
 def send_email(to: str):
