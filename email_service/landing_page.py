@@ -27,8 +27,7 @@ def register_user(email: str, db, email_sender):
 
     try:
         db.add(subscriber)
-        email_bg_task = BackgroundTask()
-        email_bg_task.add_task(email_sender, email)
+        BackgroundTask(email_sender, email)
     except:
         db.rollback()
         raise
