@@ -7,3 +7,9 @@ Running the test suite
 ```
 pytest
 ```
+
+Running migrations 
+
+```
+alembic upgrade head
+```
