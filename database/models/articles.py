@@ -27,7 +27,7 @@ class Articles(Base):
     recommended_by: Mapped[int] = mapped_column(ForeignKey("users.id"))
     created_at: Mapped[datetime] = mapped_column(insert_default=func.now())
 
-    user = relationship("User",foreign_keys=[recommended_by])
+    user = relationship("User", foreign_keys=[recommended_by])
 
 
 class ArticlesTags(Base):
