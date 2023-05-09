@@ -103,13 +103,10 @@ def upgrade() -> None:
 
 
 def downgrade() -> None:
-    # op.drop_index('article_url', table_name='articles')
-    # op.drop_table('articles')
-    # op.drop_table('articles_tags')
-    # op.drop_index('tag', table_name='tags')
-    # op.drop_table('tags')
-    # op.drop_index('email', table_name='subscribers')
-    # op.drop_table('subscribers')
-    # op.drop_index('name', table_name='users')
-    # op.drop_table('users')
-    pass
+    op.drop_index('article_url', table_name='articles')
+    op.drop_table('articles')
+    op.drop_table('articles_tags')
+    op.drop_index('tag', table_name='tags')
+    op.drop_table('tags')
+    op.drop_index('name', table_name='users')
+    op.drop_table('users')
