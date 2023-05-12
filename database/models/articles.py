@@ -36,6 +36,7 @@ class ArticlesTags(Base):
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     id_article: Mapped[int] = mapped_column(ForeignKey("articles.id"))
     id_tag: Mapped[int] = mapped_column(ForeignKey("tags.id"))
+    compost_id: Mapped[int] = mapped_column(String(15), unique=True, nullable=False)
 
     article = relationship("Article", foreign_keys=[id_article])
     tags = relationship("Tags", foreign_keys=[id_tag])

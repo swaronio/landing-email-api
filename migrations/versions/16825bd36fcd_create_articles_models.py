@@ -28,7 +28,7 @@ def upgrade() -> None:
         op.create_table(
             "users",
             sa.Column("id", mysql.INTEGER(), autoincrement=True, nullable=False),
-            sa.Column("name_user", mysql.VARCHAR(length=30), nullable=False),
+            sa.Column("name_user", mysql.VARCHAR(length=30), nullable=False, unique=True),
             sa.PrimaryKeyConstraint("id"),
             mysql_collate="utf8mb4_0900_ai_ci",
             mysql_default_charset="utf8mb4",
@@ -55,7 +55,7 @@ def upgrade() -> None:
         op.create_table(
             "tags",
             sa.Column("id", mysql.INTEGER(), autoincrement=True, nullable=False),
-            sa.Column("tag", mysql.VARCHAR(length=30), nullable=False),
+            sa.Column("tag", mysql.VARCHAR(length=30), nullable=False, unique=True),
             sa.Column(
                 "created_at", sa.DateTime(), nullable=False, server_default=func.now()
             ),
@@ -70,9 +70,9 @@ def upgrade() -> None:
         op.create_table(
             "articles",
             sa.Column("id", mysql.INTEGER(), autoincrement=True, nullable=False),
-            sa.Column("article_url", mysql.VARCHAR(length=255), nullable=False),
+            sa.Column("article_url", mysql.VARCHAR(length=255), nullable=False, unique=True),
             sa.Column(
-                "recommended_by", mysql.INTEGER(), autoincrement=False, nullable=False
+                "recommended_by", mysql.INTEGER(), nullable=False
             ),
             sa.Column(
                 "created_at", sa.DateTime(), nullable=False, server_default=func.now()
@@ -95,6 +95,7 @@ def upgrade() -> None:
             sa.Column("id_tag", mysql.INTEGER(), autoincrement=False, nullable=False),
             sa.ForeignKey("id_article", "articles.id", name="articles_tags_id"),
             sa.ForeignKey("id_tag", "tags.id", name="articles_tags_tag"),
+            sa.Column("compost_id",mysql.VARCHAR(length=15), nullable=False,unique=True),
             sa.PrimaryKeyConstraint("id"),
             mysql_collate="utf8mb4_0900_ai_ci",
             mysql_default_charset="utf8mb4",
