@@ -13,6 +13,7 @@ def new_engine():
         password=os.environ["DB_PASSWORD"],
         host=os.environ["DB_HOST"],
         database=os.environ["DB_NAME"],
+        port=os.environ["DB_PORT"]
     )
     return create_engine(url, echo=True)
 
