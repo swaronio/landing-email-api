@@ -1,5 +1,5 @@
 import os
-
+from dotenv import load_dotenv
 import uvicorn
 from email_validator import EmailNotValidError, validate_email
 from fastapi import Body, FastAPI, HTTPException
@@ -8,6 +8,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from database.connection import create_all, new_engine, new_session
 from database.models.subscriber import Subscriber
 from email_service.landing_page import UserAlreadySubscribed, register_user, send_email
+
+load_dotenv()
 
 engine = new_engine()
 create_all(engine)
