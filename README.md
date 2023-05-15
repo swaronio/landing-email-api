@@ -2,14 +2,14 @@
 
 ## Development
 
-Running the test suite
+### Running the test suite
 
 ```
 pytest
 ```
 
-Running migrations 
+### Running migrations 
 
 ```
-alembic upgrade head
+./setup_env.sh && alembic upgrade head
 ```
