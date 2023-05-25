@@ -9,4 +9,4 @@ services:
       - MYSQL_DATABASE=swaronio
       - MYSQL_PASSWORD=swaronio
     ports:
-      - "3306:3306"
+      - "3307:3306"
