@@ -4,6 +4,7 @@ from email.mime.image import MIMEImage
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from io import BytesIO
+from starlette.background import BackgroundTask
 
 import requests
 from PIL import Image
@@ -26,7 +27,7 @@ def register_user(email: str, db, email_sender):
 
     try:
         db.add(subscriber)
-        email_sender(email)
+        BackgroundTask(email_sender, email)
     except:
         db.rollback()
         raise
